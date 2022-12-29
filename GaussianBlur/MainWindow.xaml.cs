@@ -9,15 +9,28 @@ using System.Windows.Forms;
 
 namespace GaussianBlur
 {
-
+    public struct Pixel
+    {
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+        public Pixel(float _r, float _g, float _b, float _a)
+        {
+            r = _r;
+            g = _g;
+            b = _b;
+            a = _a;
+        }
+    }
     public unsafe class AsmProxy
     {
         [DllImport("GaussianBlurAsm.dll")]
 
-        private static extern double Gauss(double a, double b);
-        public double executeGauss(double a, double b) {
+        private static extern void Gauss(Pixel* input_array, Pixel* output_array, int size);
+        public void executeGauss(Pixel* input_array, Pixel* output_array, int size) {
             
-            return Gauss(a,b);
+            Gauss(input_array, output_array, size);
             //return 1.0;
         }
     }
@@ -30,20 +43,6 @@ namespace GaussianBlur
         {
             InitializeComponent();
 
-        }
-        public struct Pixel
-        {
-            public float r;
-            public float g;
-            public float b;
-            public float a;
-            public Pixel(float _r, float _g, float _b, float _a)
-            {
-                r = _r;
-                g = _g;
-                b = _b;
-                a = _a;
-            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,9 +63,6 @@ namespace GaussianBlur
             int width = bitMapCopy.Width;
             int height = bitMapCopy.Height;
             Pixel[] inBMP = new Pixel[width * height];
-            Pixel[] test = new Pixel[width * height];
-            test[0] = new Pixel(255, 255, 0, 55);
-            test[1] = new Pixel(100, 100, 100, 100);
             Pixel[] outBMP = new Pixel[width * height];
             for (int i = 0; i < width * height; i++) inBMP[i] = new Pixel();
             for (int y = 0; y < height; y++)
@@ -80,16 +76,12 @@ namespace GaussianBlur
 
             unsafe
             {
-
                 AsmProxy asmP = new AsmProxy();
                 fixed (Pixel* inBMPAddr = inBMP)
                 {
                     fixed (Pixel* outBMPAddr = outBMP)
                     {
-                         Console.WriteLine( asmP.executeGauss(1.0, 2.0));//getGrayScale2(inBMPAddr, outBMPAddr, inBMP.Length);
-                        double x = asmP.executeGauss(1, 2);
-                        string filePath2 = "out2.txt";
-                        File.WriteAllText(filePath2, x.ToString());
+                        asmP.executeGauss(inBMPAddr, outBMPAddr, inBMP.Length);
                     }
                 }
 
