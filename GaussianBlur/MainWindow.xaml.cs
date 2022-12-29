@@ -4,9 +4,23 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace GaussianBlur
 {
+
+    public unsafe class AsmProxy
+    {
+        [DllImport("GaussianBlurAsm.dll")]
+
+        private static extern double Gauss(double a, double b);
+        public double executeGauss(double a, double b) {
+            
+            return Gauss(a,b);
+            //return 1.0;
+        }
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -34,8 +48,8 @@ namespace GaussianBlur
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-            if (openFile.ShowDialog() == true)
+            OpenFileDialog openFile = new OpenFileDialog();
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Uri fileUri = new Uri(openFile.FileName);
                 PictureBox1.Source = new System.Windows.Media.Imaging.BitmapImage(fileUri);
@@ -43,10 +57,10 @@ namespace GaussianBlur
             }
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void Button_execute(object sender, RoutedEventArgs e)
         {
             BitmapImage mybitmapImage = (BitmapImage)(PictureBox1.Source);
-            Bitmap bitMapCopy = BitmapImage2Bitmap(mybitmapImage);
+            System.Drawing.Bitmap bitMapCopy = BitmapImage2Bitmap(mybitmapImage);
             int width = bitMapCopy.Width;
             int height = bitMapCopy.Height;
             Pixel[] inBMP = new Pixel[width * height];
@@ -67,12 +81,15 @@ namespace GaussianBlur
             unsafe
             {
 
-               // AsmProxy_2 asmP = new AsmProxy_2();
+                AsmProxy asmP = new AsmProxy();
                 fixed (Pixel* inBMPAddr = inBMP)
                 {
                     fixed (Pixel* outBMPAddr = outBMP)
                     {
-                        //asmP.getGrayScale2(inBMPAddr, outBMPAddr, inBMP.Length);
+                         Console.WriteLine( asmP.executeGauss(1.0, 2.0));//getGrayScale2(inBMPAddr, outBMPAddr, inBMP.Length);
+                        double x = asmP.executeGauss(1, 2);
+                        string filePath2 = "out2.txt";
+                        File.WriteAllText(filePath2, x.ToString());
                     }
                 }
 
@@ -91,7 +108,7 @@ namespace GaussianBlur
         public bool ProccesImage(Bitmap bmp)
         {
 
-
+            
             for (int i = 0; i < bmp.Width; i++)
             {
                 for (int j = 0; j < bmp.Height; j++)
@@ -107,7 +124,7 @@ namespace GaussianBlur
 
             return true;
         }
-        private Bitmap BitmapImage2Bitmap(System.Windows.Media.Imaging.BitmapImage bitmapImage)
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
             // BitmapImage bitmapImage = new BitmapImage(new Uri("../Images/test.png", UriKind.Relative));
 
@@ -116,7 +133,7 @@ namespace GaussianBlur
                 BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bitmapImage));
                 enc.Save(outStream);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+                Bitmap bitmap = new Bitmap(outStream);
 
                 return new Bitmap(bitmap);
             }

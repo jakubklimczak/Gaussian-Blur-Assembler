@@ -1,3 +1,5 @@
-﻿  Assembling GaussianBlurAsmLib.asm...
-     Trwa tworzenie biblioteki D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Debug\GaussianBlurAsm.lib i obiektu D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Debug\GaussianBlurAsm.exp
-  GaussianBlurAsm.vcxproj -> D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Debug\GaussianBlurAsm.dll
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Msbuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(499,5): warning MSB8004: Katalog Output nie kończy się ukośnikiem. To wystąpienie kompilacji doda ukośnik, ponieważ jest on niezbędny, aby możliwa była poprawna ocena katalogu Output.
+  Assembling GaussianBlurAsmLib.asm...
+  LINK : nie znaleziono elementu D:\.politechnika\SE\Gaussian-Blur-Assembler\\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.dll ani nie został on skompilowany podczas ostatniego konsolidowania przyrostowego; zostanie wykonana pełna konsolidacja
+     Trwa tworzenie biblioteki D:\.politechnika\SE\Gaussian-Blur-Assembler\\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.lib i obiektu D:\.politechnika\SE\Gaussian-Blur-Assembler\\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.exp
+  GaussianBlurAsm.vcxproj -> D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.dll

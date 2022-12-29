@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Debug\GaussianBlurAsm.dll</FullPath>
+      <FullPath>D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

@@ -1,0 +1,6 @@
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.csproj.AssemblyReference.cache
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.csproj.ResolveComReference.cache
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.GeneratedMSBuildEditorConfig.editorconfig
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.AssemblyInfoInputs.cache
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.AssemblyInfo.cs
+D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\obj\Debug\net6.0-windows\GaussianBlur.csproj.CoreCompileInputs.cache

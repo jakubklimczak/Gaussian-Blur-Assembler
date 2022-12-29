@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "x+1ZOZCsveLsqKwqb1CKCg3PMFrGT5la8FvKk4/i3ok7D/05kUFwKu77ECK2byGrIm+2Qg8yVzAssBRTtaqZxA==",
+  "dgSpecHash": "wadg0jeS3/tg3eWKOq8bKFHDqRRocER583Yjd9lDZUbpA/8LWn9vsKAjrlKo4cVv+y/SXd1hblZ0jWdUqe8U5A==",
   "success": true,
   "projectFilePath": "D:\\.politechnika\\SE\\Gaussian-Blur-Assembler\\GaussianBlur\\GaussianBlur.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\mateusz\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512"
+    "C:\\Users\\mateusz\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\mateusz\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\mateusz\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }
