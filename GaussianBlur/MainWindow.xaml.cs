@@ -9,13 +9,15 @@ using System.Windows.Forms;
 
 namespace GaussianBlur
 {
+
+
     public struct Pixel
     {
-        public float r;
-        public float g;
-        public float b;
-        public float a;
-        public Pixel(float _r, float _g, float _b, float _a)
+        public byte r;
+        public byte g;
+        public byte b;
+        public byte a;
+        public Pixel(byte _r, byte _g, byte _b, byte _a)
         {
             r = _r;
             g = _g;
@@ -27,10 +29,10 @@ namespace GaussianBlur
     {
         [DllImport("GaussianBlurAsm.dll")]
 
-        private static extern void Gauss(Pixel* input_array, Pixel* output_array, int size);
-        public void executeGauss(Pixel* input_array, Pixel* output_array, int size) {
+        private static extern void Gauss(int arraysize, byte* arg1, byte* arg2, byte* arg3, byte* arg4, byte* arg5, byte* arg6);
+        public void executeGauss(int arraysize, byte* arg1,byte* arg2,byte* arg3,byte* arg4,byte* arg5,byte* arg6) {
             
-            Gauss(input_array, output_array, size);
+            Gauss(arraysize, arg1, arg2, arg3, arg4, arg5, arg6);
             //return 1.0;
         }
     }
@@ -64,6 +66,7 @@ namespace GaussianBlur
             int height = bitMapCopy.Height;
             Pixel[] inBMP = new Pixel[width * height];
             Pixel[] outBMP = new Pixel[width * height];
+
             for (int i = 0; i < width * height; i++) inBMP[i] = new Pixel();
             for (int y = 0; y < height; y++)
                 for (int x = 0; x < width; x++)
@@ -76,15 +79,31 @@ namespace GaussianBlur
 
             unsafe
             {
-                AsmProxy asmP = new AsmProxy();
-                fixed (Pixel* inBMPAddr = inBMP)
+                
+
+                byte[] in_red = new byte[inBMP.Length];
+                byte[] in_green = new byte[inBMP.Length];
+                byte[] in_blue = new byte[inBMP.Length];
+                for (int i = 0; i < inBMP.Length; i++)
                 {
-                    fixed (Pixel* outBMPAddr = outBMP)
-                    {
-                        asmP.executeGauss(inBMPAddr, outBMPAddr, inBMP.Length);
-                    }
+                    in_red[i] = inBMP[i].r;
+                    in_green[i] = inBMP[i].g;
+                    in_blue[i] = inBMP[i].b;
                 }
 
+                byte[] out_red = new byte[inBMP.Length];
+                byte[] out_green = new byte[inBMP.Length];
+                byte[] out_blue = new byte[inBMP.Length];
+
+                AsmProxy asmP = new AsmProxy();
+                fixed (byte* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
+                    out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
+                {
+                    asmP.executeGauss(width*height, in_redAddr, in_greenAddr, in_blueAddr,
+                    out_redAddr, out_greenAddr, out_blueAddr );
+                }
+
+                
             }
 
             for (int y = 0; y < height; y++)
