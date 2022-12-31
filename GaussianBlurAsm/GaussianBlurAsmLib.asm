@@ -23,18 +23,17 @@ MLoop:
 
     ;mov eax, byte ptr[rcx]  
 
-    
 
     movd xmm1, dword ptr[R8]            ; moving two pixels into xmm1
     INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSRLDQ xmm0, 2
+    PSRLDQ xmm0, 2                      ; shifting xmm0 to right so only one pixel is left
 
-    vinsertf128 ymm0, ymm0, xmm0, 1
-    pxor xmm0, xmm0
+    vinsertf128 ymm0, ymm0, xmm0, 1     ; copying lower part of ymm0 into higher part
+    pxor xmm0, xmm0                     ; clearing xmm0
 
-    movd xmm1, dword ptr[R8+16]
-    INSERTPS xmm0, xmm1, 00000000b
-    PSLLDQ xmm0, 4
+    movd xmm1, dword ptr[R8+16]         ; moving next two pixels into xmm1
+    INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
+    PSLLDQ xmm0, 4                      ; shifting xmm0 left by two pixels
 
     movd xmm1, dword ptr[R8+(RDX)]
     INSERTPS xmm0, xmm1, 00000000b
@@ -48,12 +47,12 @@ MLoop:
     INSERTPS xmm0, xmm1, 00000000b
     PSLLDQ xmm0, 2
 
-    mov eax, dword ptr[R8+(2*RDX)+32]
-    shr eax, 16
-    ;PSRLDQ xmm1, 2
-    ;movd eax, xmm1
+    pxor xmm1, xmm1                     ; clearing xmm1
+    movd xmm1, dword ptr[R8+(2*RDX)+32] ; moving two pixels into xmm1
+    PSRLDQ xmm1, 2                      ; shifting xmm1 right by one pixel
+    POR xmm0,xmm1                       ; logic OR on xmm0 and xmm1 so that only one pixel is inserted
 
-    PINSRW xmm0, eax, 0
+    ;PINSRW xmm0, eax, 0
 
 
 
