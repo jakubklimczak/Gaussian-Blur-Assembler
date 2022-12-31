@@ -29,10 +29,10 @@ namespace GaussianBlur
     {
         [DllImport("GaussianBlurAsm.dll")]
 
-        private static extern void Gauss(int arraysize, byte* arg1, byte* arg2, byte* arg3, byte* arg4, byte* arg5, byte* arg6);
-        public void executeGauss(int arraysize, byte* arg1,byte* arg2,byte* arg3,byte* arg4,byte* arg5,byte* arg6) {
+        private static extern void Gauss(int arraysize, int width, ushort* arg1, ushort* arg2, ushort* arg3, ushort* arg4, ushort* arg5, ushort* arg6);
+        public void executeGauss(int arraysize,int width, ushort* arg1, ushort* arg2, ushort* arg3, ushort* arg4, ushort* arg5, ushort* arg6) {
             
-            Gauss(arraysize, arg1, arg2, arg3, arg4, arg5, arg6);
+            Gauss(arraysize, width, arg1, arg2, arg3, arg4, arg5, arg6);
             //return 1.0;
         }
     }
@@ -81,25 +81,32 @@ namespace GaussianBlur
             {
                 
 
-                byte[] in_red = new byte[inBMP.Length];
-                byte[] in_green = new byte[inBMP.Length];
-                byte[] in_blue = new byte[inBMP.Length];
+                ushort[] in_red = new ushort[inBMP.Length];
+                ushort[] in_green = new ushort[inBMP.Length];
+                ushort[] in_blue = new ushort[inBMP.Length];
+
+                ushort[] out_red = new ushort[inBMP.Length];
+                ushort[] out_green = new ushort[inBMP.Length];
+                ushort[] out_blue = new ushort[inBMP.Length];
+
                 for (int i = 0; i < inBMP.Length; i++)
                 {
                     in_red[i] = inBMP[i].r;
                     in_green[i] = inBMP[i].g;
                     in_blue[i] = inBMP[i].b;
+
+                    out_red[i] = (byte)69;
+                    out_green[i] = (byte)105;
+                    out_blue[i] = (byte)12;
                 }
 
-                byte[] out_red = new byte[inBMP.Length];
-                byte[] out_green = new byte[inBMP.Length];
-                byte[] out_blue = new byte[inBMP.Length];
+
 
                 AsmProxy asmP = new AsmProxy();
-                fixed (byte* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
+                fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
-                    asmP.executeGauss(width*height, in_redAddr, in_greenAddr, in_blueAddr,
+                    asmP.executeGauss(width*height,width, in_redAddr, in_greenAddr, in_blueAddr,
                     out_redAddr, out_greenAddr, out_blueAddr );
                 }
 
