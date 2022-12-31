@@ -25,13 +25,16 @@ MLoop:
 
     
 
-    movd xmm1, dword ptr[R8]
+    movd xmm1, dword ptr[R8]            ; moving two pixels into xmm1
+    INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
+    PSRLDQ xmm0, 2
+
+    vinsertf128 ymm0, ymm0, xmm0, 1
+    pxor xmm0, xmm0
+
+    movd xmm1, dword ptr[R8+16]
     INSERTPS xmm0, xmm1, 00000000b
     PSLLDQ xmm0, 4
-
-    movd xmm1, dword ptr[R8+32]
-    INSERTPS xmm0, xmm1, 00000000b
-    PSLLDQ xmm0, 2
 
     movd xmm1, dword ptr[R8+(RDX)]
     INSERTPS xmm0, xmm1, 00000000b
@@ -43,18 +46,18 @@ MLoop:
 
     movd xmm1, dword ptr[R8+(2*RDX)]
     INSERTPS xmm0, xmm1, 00000000b
-    ;PSLLDQ xmm0, 4
+    PSLLDQ xmm0, 2
 
-    vinsertf128 ymm0, ymm0, xmm0, 1
+    mov eax, dword ptr[R8+(2*RDX)+32]
+    shr eax, 16
+    ;PSRLDQ xmm1, 2
+    ;movd eax, xmm1
 
-    pxor xmm0, xmm0
-    movd xmm1, dword ptr[R8+(2*RDX)+32]
-    INSERTPS xmm0, xmm1, 00000000b
-    PSRLDQ xmm0, 2
+    PINSRW xmm0, eax, 0
 
 
 
-    ;vpslldq ymm0, ymm0, 4
+    ;vpslldq ymm0, ymm0, 0
 
     ;vmovaps ymm2,ymm0
 
