@@ -126,6 +126,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>GaussianBlurAsmLib.def</ModuleDefinitionFile>
       <NoEntryPoint>true</NoEntryPoint>
+      <LargeAddressAware>false</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

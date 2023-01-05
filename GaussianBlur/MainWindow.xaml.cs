@@ -110,18 +110,20 @@ namespace GaussianBlur
                     out_redAddr, out_greenAddr, out_blueAddr );
                 }
 
-                
+
+                for (int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
+                    {
+                        bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb((ushort)out_red[x + height * y], (ushort)out_green[x + height * y], (ushort)out_blue[x + height * y]));
+
+                    }
+                PictureBox2.Source = ToBitmapImage(bitMapCopy);
+
             }
 
-            for (int y = 0; y < height; y++)
-                for (int x = 0; x < width; x++)
-                {
-                    bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb((int)outBMP[y * width + x].r, (int)outBMP[y * width + x].g, (int)outBMP[y * width + x].b));
-
-                }
-            PictureBox2.Source = ToBitmapImage(bitMapCopy);
-
         }
+
+
 
         public bool ProccesImage(Bitmap bmp)
         {

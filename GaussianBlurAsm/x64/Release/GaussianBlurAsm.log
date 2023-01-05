@@ -1,0 +1,5 @@
+﻿  Assembling GaussianBlurAsmLib.asm...
+     Trwa tworzenie biblioteki D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Release\GaussianBlurAsm.lib i obiektu D:\.politechnika\SE\Gaussian-Blur-Assembler\x64\Release\GaussianBlurAsm.exp
+  LINK : określono opcję /LTCG, lecz generowanie kodu nie było wymagane; usuń opcję /LTCG z wiersza polecenia konsolidatora w celu podwyższenia wydajności konsolidatora
+GaussianBlurAsmLib.obj : error LNK2017: Relokacja „ADDR32” do elementu „iterator” jest nieprawidłowa bez opcji /LARGEADDRESSAWARE:NO
+LINK : fatal error LNK1165: konsolidacja nie powiodła się z powodu błędów naprawy

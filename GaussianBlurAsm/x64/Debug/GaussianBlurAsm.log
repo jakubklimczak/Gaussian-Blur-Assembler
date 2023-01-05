@@ -1,4 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Msbuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(499,5): warning MSB8004: Katalog Output nie kończy się ukośnikiem. To wystąpienie kompilacji doda ukośnik, ponieważ jest on niezbędny, aby możliwa była poprawna ocena katalogu Output.
   Assembling GaussianBlurAsmLib.asm...
      Trwa tworzenie biblioteki D:\.politechnika\SE\Gaussian-Blur-Assembler\\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.lib i obiektu D:\.politechnika\SE\Gaussian-Blur-Assembler\\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.exp
+LINK : warning LNK4075: zignorowano opcję „/LARGEADDRESSAWARE:NO” z powodu określenia opcji „/DLL”
   GaussianBlurAsm.vcxproj -> D:\.politechnika\SE\Gaussian-Blur-Assembler\GaussianBlur\x64\Debug\net5.0-windows\GaussianBlurAsm.dll
