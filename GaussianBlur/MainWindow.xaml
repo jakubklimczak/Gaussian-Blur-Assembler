@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GaussianBlur"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1080" Width="1920">
     <Grid>
-        <Image x:Name="PictureBox1" HorizontalAlignment="Left" Height="282" Margin="10,10,0,0" VerticalAlignment="Top" Width="375"/>
-        <Image x:Name="PictureBox2" HorizontalAlignment="Left" Height="282" Margin="413,10,0,0" VerticalAlignment="Top" Width="375"/>
-        <Button x:Name="button1" Content="Browse" HorizontalAlignment="Left" Margin="157,320,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_Click"/>
-        <Button x:Name="button2" Content="Grayscale" HorizontalAlignment="Left" Margin="522,320,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_execute"/>
+        <Image x:Name="PictureBox1" HorizontalAlignment="Left" Height="500" Margin="10,10,0,0" VerticalAlignment="Top" Width="878"/>
+        <Image x:Name="PictureBox2" HorizontalAlignment="Left" Height="500" Margin="1043,10,0,0" VerticalAlignment="Top" Width="878
+               "/>
+        <Button x:Name="button1" Content="Browse" HorizontalAlignment="Left" Margin="413,929,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_Click"/>
+        <Button x:Name="button2" Content="Grayscale" HorizontalAlignment="Left" Margin="1464,929,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_execute"/>
 
     </Grid>
 </Window>
