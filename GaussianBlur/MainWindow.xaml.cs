@@ -95,6 +95,10 @@ namespace GaussianBlur
                     in_green[i] = inBMP[i].g;
                     in_blue[i] = inBMP[i].b;
 
+                    //out_red[i] = inBMP[i].r;
+                    //out_green[i] = inBMP[i].g;
+                    //out_blue[i] = inBMP[i].b;
+
                     out_red[i] = (byte)69;
                     out_green[i] = (byte)105;
                     out_blue[i] = (byte)12;
@@ -106,15 +110,15 @@ namespace GaussianBlur
                 fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
-                    asmP.executeGauss(width*height,width, in_redAddr, in_greenAddr, in_blueAddr,
-                    out_redAddr, out_greenAddr, out_blueAddr );
+                    asmP.executeGauss(width * height, width, in_redAddr, in_greenAddr, in_blueAddr,
+                    out_redAddr, out_greenAddr, out_blueAddr);
                 }
 
 
                 for (int y = 0; y < height; y++)
                     for (int x = 0; x < width; x++)
                     {
-                        bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb((ushort)out_red[x + height * y], (ushort)out_green[x + height * y], (ushort)out_blue[x + height * y]));
+                        bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + width * y], out_green[x + width * y], out_blue[x + width * y]));
 
                     }
                 PictureBox2.Source = ToBitmapImage(bitMapCopy);
