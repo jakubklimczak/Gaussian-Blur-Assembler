@@ -29,8 +29,6 @@ Gauss proc
     mov [iterator], 0
 
     mov [arraysize], RCX                    ; moving size of the array into arraysize
-    sub [arraysize], RDI
-    sub [arraysize], RDI
 
 
     mov rax, 2
@@ -41,8 +39,7 @@ Gauss proc
     add [width2], R13
 
     mov R14, R8
-    add R14, R13
-    add R14, 2
+    ;sub R14,2
 
     mov R12, qword ptr[RSP+48]
 
@@ -130,8 +127,6 @@ RLoop:
     mov [iterator], 0
 
     mov [arraysize], RCX                    ; moving size of the array into arraysize
-    sub [arraysize], RDI
-    sub [arraysize], RDI
 
 
     mov rax, 2
@@ -142,8 +137,7 @@ RLoop:
     add [width2], R13
 
     mov R14, R9
-    add R14, R13
-    add R14, 2
+    ;sub R14,2
 
     mov R12, qword ptr[RSP+56]
 
@@ -233,8 +227,6 @@ RLoop:
         mov [iterator], 0
 
     mov [arraysize], RCX                    ; moving size of the array into arraysize
-    sub [arraysize], RDI
-    sub [arraysize], RDI
 
 
     mov rax, 2
@@ -245,8 +237,7 @@ RLoop:
     add [width2], R13
 
     mov R14, qword ptr[RSP+40]
-    add R14, R13
-    add R14, 2
+    ;sub R14,2
 
     mov R12, qword ptr[RSP+64]
 ;============================================BLUE====================================================================================

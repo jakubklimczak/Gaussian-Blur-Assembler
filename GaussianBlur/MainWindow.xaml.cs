@@ -85,7 +85,7 @@ namespace GaussianBlur
             for (int y = 0; y < newHeight; y++)
                 for (int x = 0; x < newWidth; x++)
                 {
-                    if (x != 0 && y != 0 && x != width && y != height && x != width + 1 && y != height + 1)
+                    if (x != 0 && y != 0 /*&& x != width && y != height*/ && x != width + 1 && y != height + 1)
                         bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x - 1, y - 1));
 
                 }
@@ -168,7 +168,7 @@ namespace GaussianBlur
                 fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
-                    asmP.executeGauss(newWidth * newHeight, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                    asmP.executeGauss(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
                     out_redAddr, out_greenAddr, out_blueAddr);
                 }
 
