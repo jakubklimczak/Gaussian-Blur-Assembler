@@ -62,8 +62,23 @@ namespace GaussianBlur
         {
             BitmapImage mybitmapImage = (BitmapImage)(PictureBox1.Source);
             System.Drawing.Bitmap bitMapCopy = BitmapImage2Bitmap(mybitmapImage);
+
             int width = bitMapCopy.Width;
             int height = bitMapCopy.Height;
+
+            //===============================================================================================================
+
+            // Calculate the new width and height of the thumbnail image
+            int newWidth = width + 2;
+            int newHeight = height + 2;
+
+            // Create a thumbnail image
+            Image thumbnailImage = bitMapCopy.GetThumbnailImage(newWidth, newHeight, null, IntPtr.Zero);
+
+            System.Drawing.Bitmap bitMapCopy2 = new Bitmap(thumbnailImage);
+            //===============================================================================================================
+
+            //System.Drawing.Bitmap bitMapCopy2 = new Bitmap(width + 2, height + 2);
             Pixel[] inBMP = new Pixel[width * height];
             Pixel[] outBMP = new Pixel[width * height];
 
@@ -79,15 +94,49 @@ namespace GaussianBlur
 
             unsafe
             {
-                
 
-                ushort[] in_red = new ushort[inBMP.Length];
-                ushort[] in_green = new ushort[inBMP.Length];
-                ushort[] in_blue = new ushort[inBMP.Length];
+                int offset = 2 * width + 2 * height + 4;
+                ushort[] in_red = new ushort[inBMP.Length + offset];
+                ushort[] in_green = new ushort[inBMP.Length + offset];
+                ushort[] in_blue = new ushort[inBMP.Length + offset];
 
                 ushort[] out_red = new ushort[inBMP.Length];
                 ushort[] out_green = new ushort[inBMP.Length];
                 ushort[] out_blue = new ushort[inBMP.Length];
+
+                //for(int i = 0; i < in_red.Length; i++)
+                //{
+                //    if (i == 0)
+                //    {
+                //        in_red[i] = inBMP[0].r;
+                //        in_green[i] = inBMP[0].g;
+                //        in_blue[i] = inBMP[0].b;
+                //    }
+                //    else if (i == width + 1)
+                //    {
+                //        in_red[i] = inBMP[width - 1].r;
+                //        in_green[i] = inBMP[width - 1].g;
+                //        in_blue[i] = inBMP[width - 1].b;
+                //    }
+                //    else if (i == in_red.Length - width - 2)
+                //    {
+                //        in_red[i] = inBMP[width * height - width].r;
+                //        in_green[i] = inBMP[width * height - width].g;
+                //        in_blue[i] = inBMP[width * height - width].b;
+                //    }
+                //    else if (i == in_red.Length - 1)
+                //    {
+                //        in_red[i] = inBMP[width * height - 1].r;
+                //        in_green[i] = inBMP[width * height - 1].g;
+                //        in_blue[i] = inBMP[width * height - 1].b;
+                //    }
+                //    else if (i < width + 2)
+                //    {
+                //        //in_red[i] = inBMP[i].r;
+                //        //in_green[i] = inBMP[i].g;
+                //        //in_blue[i] = inBMP[i].b;
+                //    }
+                //}
 
                 for (int i = 0; i < inBMP.Length; i++)
                 {
@@ -114,14 +163,24 @@ namespace GaussianBlur
                     out_redAddr, out_greenAddr, out_blueAddr);
                 }
 
+                int new_height = height + 2;
+                int new_width = width + 2;
+                //for (int y = 0; y < new_height; y++)
+                //    for (int x = 0; x < new_width; x++)
+                //    {
+                //        if(x!=0 && y!=0)
+                //            bitMapCopy2.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + new_width * y], out_green[x + new_width * y], out_blue[x + new_width * y]));
 
-                for (int y = 0; y < height; y++)
-                    for (int x = 0; x < width; x++)
+                //    }                
+
+                for (int y = 0; y < new_height; y++)
+                    for (int x = 0; x < new_width; x++)
                     {
-                        bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + width * y], out_green[x + width * y], out_blue[x + width * y]));
+                        if (x != 0 && y != 0 && x!= width && y!= height && x != width + 1 && y != height + 1)
+                            bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x-1,y-1));
 
                     }
-                PictureBox2.Source = ToBitmapImage(bitMapCopy);
+                PictureBox2.Source = ToBitmapImage(bitMapCopy2);
 
             }
 
