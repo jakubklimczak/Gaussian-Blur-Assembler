@@ -79,16 +79,25 @@ namespace GaussianBlur
             //===============================================================================================================
 
             //System.Drawing.Bitmap bitMapCopy2 = new Bitmap(width + 2, height + 2);
-            Pixel[] inBMP = new Pixel[width * height];
-            Pixel[] outBMP = new Pixel[width * height];
+            Pixel[] inBMP = new Pixel[newWidth * newWidth];
+            //Pixel[] outBMP = new Pixel[width * height];
 
-            for (int i = 0; i < width * height; i++) inBMP[i] = new Pixel();
-            for (int y = 0; y < height; y++)
-                for (int x = 0; x < width; x++)
+            for (int y = 0; y < newHeight; y++)
+                for (int x = 0; x < newWidth; x++)
                 {
-                    System.Drawing.Color bmpColor = bitMapCopy.GetPixel(x, y);
+                    if (x != 0 && y != 0 && x != width && y != height && x != width + 1 && y != height + 1)
+                        bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x - 1, y - 1));
 
-                    inBMP[y * width + x] = new Pixel(bmpColor.R, bmpColor.G, bmpColor.B, bmpColor.A);
+                }
+
+
+            for (int i = 0; i < newWidth * newHeight; i++) inBMP[i] = new Pixel();
+            for (int y = 0; y < newHeight; y++)
+                for (int x = 0; x < newWidth; x++)
+                {
+                    System.Drawing.Color bmpColor = bitMapCopy2.GetPixel(x, y);
+
+                    inBMP[y * newWidth + x] = new Pixel(bmpColor.R, bmpColor.G, bmpColor.B, bmpColor.A);
 
                 }
 
@@ -159,28 +168,24 @@ namespace GaussianBlur
                 fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
-                    asmP.executeGauss(width * height, width, in_redAddr, in_greenAddr, in_blueAddr,
+                    asmP.executeGauss(newWidth * newHeight, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
                     out_redAddr, out_greenAddr, out_blueAddr);
                 }
 
-                int new_height = height + 2;
-                int new_width = width + 2;
-                //for (int y = 0; y < new_height; y++)
-                //    for (int x = 0; x < new_width; x++)
-                //    {
-                //        if(x!=0 && y!=0)
-                //            bitMapCopy2.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + new_width * y], out_green[x + new_width * y], out_blue[x + new_width * y]));
-
-                //    }                
-
-                for (int y = 0; y < new_height; y++)
-                    for (int x = 0; x < new_width; x++)
+                for (int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
                     {
-                        if (x != 0 && y != 0 && x!= width && y!= height && x != width + 1 && y != height + 1)
-                            bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x-1,y-1));
-
+                        bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + width * y], out_green[x + width * y], out_blue[x + width * y]));
                     }
-                PictureBox2.Source = ToBitmapImage(bitMapCopy2);
+
+                //for (int y = 0; y < newHeight; y++)
+                //    for (int x = 0; x < newWidth; x++)
+                //    {
+                //        bitMapCopy2.SetPixel(x, y, System.Drawing.Color.FromArgb(in_red[x + newWidth * y], in_green[x + newWidth * y], in_blue[x + newWidth * y]));
+                //    }
+
+                PictureBox2.Source = ToBitmapImage(bitMapCopy);
+                bitMapCopy.Save("image_with_border.jpg", ImageFormat.Jpeg);
 
             }
 

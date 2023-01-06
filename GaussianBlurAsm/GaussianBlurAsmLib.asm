@@ -41,6 +41,8 @@ Gauss proc
     add [width2], R13
 
     mov R14, R8
+    add R14, R13
+    add R14, 2
 
     mov R12, qword ptr[RSP+48]
 
@@ -110,6 +112,17 @@ RLoop:
     add iterator, 2
     add R14, 2
 
+    mov RAX,R14
+    mov RDX, 0
+    div R13
+
+    CMP RDX, 0
+
+    jnz NoPixelSkipR
+    add R14, 4
+
+    NoPixelSkipR:
+
     dec arraysize
     jnz  RLoop
     ;===========================================GREEN PREPARATION====================================================================
@@ -129,6 +142,8 @@ RLoop:
     add [width2], R13
 
     mov R14, R9
+    add R14, R13
+    add R14, 2
 
     mov R12, qword ptr[RSP+56]
 
@@ -200,6 +215,17 @@ RLoop:
     add iterator, 2
     add R14, 2
 
+    mov RAX,R14
+    mov RDX, 0
+    div R13
+
+    CMP RDX, 0
+
+    jnz NoPixelSkipG
+    add R14, 4
+
+    NoPixelSkipG:
+
     dec arraysize
     jnz  GLoop
 
@@ -219,6 +245,8 @@ RLoop:
     add [width2], R13
 
     mov R14, qword ptr[RSP+40]
+    add R14, R13
+    add R14, 2
 
     mov R12, qword ptr[RSP+64]
 ;============================================BLUE====================================================================================
@@ -287,6 +315,17 @@ RLoop:
 
     add iterator, 2
     add R14, 2
+
+    mov RAX,R14
+    mov RDX, 0
+    div R13
+
+    CMP RDX, 0
+
+    jnz NoPixelSkipB
+    add R14, 4
+
+    NoPixelSkipB:
 
     dec arraysize
     jnz  BLoop
