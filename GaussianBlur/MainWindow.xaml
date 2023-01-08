@@ -12,6 +12,8 @@
                "/>
         <Button x:Name="button1" Content="Browse" HorizontalAlignment="Left" Margin="410,835,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_Click"/>
         <Button x:Name="button2" Content="Grayscale" HorizontalAlignment="Left" Margin="1545,830,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_execute"/>
-
+        <TextBox Name="textoutput" Margin="672,641,672,118">
+            Initial text contents of the TextBox.
+        </TextBox>
     </Grid>
 </Window>

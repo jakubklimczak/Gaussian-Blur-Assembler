@@ -1,14 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31829.152
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaussianBlur", "GaussianBlur\GaussianBlur.csproj", "{3C39776C-A6A2-4E7C-85FF-21C3943D8488}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BD743DEE-3940-4FFA-94FB-BAE68B751EE0} = {BD743DEE-3940-4FFA-94FB-BAE68B751EE0}
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA} = {E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GaussianBlurAsm", "GaussianBlurAsm\GaussianBlurAsm.vcxproj", "{BD743DEE-3940-4FFA-94FB-BAE68B751EE0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GaussianBlurCpp", "GaussianBlurCpp\GaussianBlurCpp.vcxproj", "{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +45,18 @@ Global
 		{BD743DEE-3940-4FFA-94FB-BAE68B751EE0}.Release|x64.Build.0 = Release|x64
 		{BD743DEE-3940-4FFA-94FB-BAE68B751EE0}.Release|x86.ActiveCfg = Release|Win32
 		{BD743DEE-3940-4FFA-94FB-BAE68B751EE0}.Release|x86.Build.0 = Release|Win32
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|Any CPU.Build.0 = Debug|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|x64.ActiveCfg = Debug|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|x64.Build.0 = Debug|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Debug|x86.Build.0 = Debug|Win32
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|Any CPU.ActiveCfg = Release|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|Any CPU.Build.0 = Release|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|x64.ActiveCfg = Release|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|x64.Build.0 = Release|x64
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|x86.ActiveCfg = Release|Win32
+		{E9B4D3A6-E9DC-458C-9C2C-33C61AA702FA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Timers;
+using System.Threading;
 
 namespace GaussianBlur
 {
@@ -33,6 +35,16 @@ namespace GaussianBlur
         public void executeGauss(int arraysize,int width, ushort* arg1, ushort* arg2, ushort* arg3, ushort* arg4, ushort* arg5, ushort* arg6) {
             
             Gauss(arraysize, width, arg1, arg2, arg3, arg4, arg5, arg6);
+
+        }
+
+        [DllImport("GaussianBlurCpp.dll")]
+
+        private static extern void ExecuteGaussianBlurCpp(int arraysize, int width, ushort* arg1, ushort* arg2, ushort* arg3, ushort* arg4, ushort* arg5, ushort* arg6);
+        public void executeGaussCpp(int arraysize, int width, ushort* arg1, ushort* arg2, ushort* arg3, ushort* arg4, ushort* arg5, ushort* arg6)
+        {
+
+            ExecuteGaussianBlurCpp(arraysize, width, arg1, arg2, arg3, arg4, arg5, arg6);
             //return 1.0;
         }
     }
@@ -41,6 +53,7 @@ namespace GaussianBlur
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static System.Timers.Timer timer;
         public MainWindow()
         {
             InitializeComponent();
@@ -76,6 +89,7 @@ namespace GaussianBlur
             Image thumbnailImage = bitMapCopy.GetThumbnailImage(newWidth, newHeight, null, IntPtr.Zero);
 
             System.Drawing.Bitmap bitMapCopy2 = new Bitmap(thumbnailImage);
+            //bitMapCopy2.Save("image_with_border.jpg", ImageFormat.Jpeg);
             //===============================================================================================================
 
             //System.Drawing.Bitmap bitMapCopy2 = new Bitmap(width + 2, height + 2);
@@ -168,8 +182,22 @@ namespace GaussianBlur
                 fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
+                    long elapsedMsAsm = 0, elapsedMsCpp = 0;
+
+                    var watch = System.Diagnostics.Stopwatch.StartNew();
+
                     asmP.executeGauss(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
                     out_redAddr, out_greenAddr, out_blueAddr);
+
+                    watch.Stop();
+                    elapsedMsAsm = watch.ElapsedMilliseconds;
+
+                    watch = System.Diagnostics.Stopwatch.StartNew();
+                    asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                                        out_redAddr, out_greenAddr, out_blueAddr);
+                    watch.Stop();
+                    elapsedMsCpp = watch.ElapsedMilliseconds;
+                    textoutput.Text = "Assembler: "+elapsedMsAsm.ToString()+"\nCpp: "+elapsedMsCpp.ToString();
                 }
 
                 for (int y = 0; y < height; y++)
