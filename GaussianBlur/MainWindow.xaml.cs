@@ -45,7 +45,6 @@ namespace GaussianBlur
         {
 
             ExecuteGaussianBlurCpp(arraysize, width, arg1, arg2, arg3, arg4, arg5, arg6);
-            //return 1.0;
         }
     }
     /// <summary>
@@ -93,7 +92,7 @@ namespace GaussianBlur
             //===============================================================================================================
 
             //System.Drawing.Bitmap bitMapCopy2 = new Bitmap(width + 2, height + 2);
-            Pixel[] inBMP = new Pixel[newWidth * newWidth];
+            Pixel[] inBMP = new Pixel[newWidth * newHeight];
             //Pixel[] outBMP = new Pixel[width * height];
 
             for (int y = 0; y < newHeight; y++)
@@ -171,9 +170,9 @@ namespace GaussianBlur
                     //out_green[i] = inBMP[i].g;
                     //out_blue[i] = inBMP[i].b;
 
-                    out_red[i] = (byte)69;
-                    out_green[i] = (byte)105;
-                    out_blue[i] = (byte)12;
+                    out_red[i] = (byte)255;
+                    out_green[i] = (byte)255;
+                    out_blue[i] = (byte)255;
                 }
 
 
@@ -186,17 +185,20 @@ namespace GaussianBlur
 
                     var watch = System.Diagnostics.Stopwatch.StartNew();
 
+                    //asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                    //                    out_redAddr, out_greenAddr, out_blueAddr);
+                    watch.Stop();
+                    elapsedMsCpp = watch.ElapsedMilliseconds;
+
+                    watch = System.Diagnostics.Stopwatch.StartNew();
+
                     asmP.executeGauss(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
                     out_redAddr, out_greenAddr, out_blueAddr);
 
                     watch.Stop();
                     elapsedMsAsm = watch.ElapsedMilliseconds;
 
-                    watch = System.Diagnostics.Stopwatch.StartNew();
-                    asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
-                                        out_redAddr, out_greenAddr, out_blueAddr);
-                    watch.Stop();
-                    elapsedMsCpp = watch.ElapsedMilliseconds;
+
                     textoutput.Text = "Assembler: "+elapsedMsAsm.ToString()+"\nCpp: "+elapsedMsCpp.ToString();
                 }
 
@@ -213,7 +215,8 @@ namespace GaussianBlur
                 //    }
 
                 PictureBox2.Source = ToBitmapImage(bitMapCopy);
-                bitMapCopy.Save("image_with_border.jpg", ImageFormat.Jpeg);
+                bitMapCopy.Save("bitMapCopy.jpg", ImageFormat.Jpeg);
+                bitMapCopy2.Save("bitMapCopy2.jpg", ImageFormat.Jpeg);
 
             }
 
