@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Timers;
 using System.Threading;
+using System.Drawing.Drawing2D;
 
 namespace GaussianBlur
 {
@@ -84,24 +85,34 @@ namespace GaussianBlur
             int newWidth = width + 2;
             int newHeight = height + 2;
 
-            // Create a thumbnail image
-            Image thumbnailImage = bitMapCopy.GetThumbnailImage(newWidth, newHeight, null, IntPtr.Zero);
+            Image newImage = new Bitmap(newWidth, newHeight);
+            using (Graphics gfx = Graphics.FromImage(newImage))
+            {
+                using (Brush border = new SolidBrush(Color.White))
+                {
+                    gfx.FillRectangle(border, 0, 0,
+                        newWidth, newHeight);
+                }
+                gfx.DrawImage(bitMapCopy, new Rectangle(1, 1, bitMapCopy.Width, bitMapCopy.Height));
 
-            System.Drawing.Bitmap bitMapCopy2 = new Bitmap(thumbnailImage);
-            //bitMapCopy2.Save("image_with_border.jpg", ImageFormat.Jpeg);
+            }
+            System.Drawing.Bitmap bitMapCopy2 = (Bitmap)newImage;
+            bitMapCopy2.Save("initial_resize.bmp", ImageFormat.Bmp);
             //===============================================================================================================
 
             //System.Drawing.Bitmap bitMapCopy2 = new Bitmap(width + 2, height + 2);
             Pixel[] inBMP = new Pixel[newWidth * newHeight];
             //Pixel[] outBMP = new Pixel[width * height];
 
-            for (int y = 0; y < newHeight; y++)
-                for (int x = 0; x < newWidth; x++)
-                {
-                    if (x != 0 && y != 0 /*&& x != width && y != height*/ && x != width + 1 && y != height + 1)
-                        bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x - 1, y - 1));
+            //for (int y = 0; y < newHeight; y++)
+            //    for (int x = 0; x < newWidth; x++)
+            //    {
+            //        if (x != 0 && y != 0 /*&& x != width && y != height*/ && x != width + 1 && y != height + 1)
+            //            bitMapCopy2.SetPixel(x, y, bitMapCopy.GetPixel(x - 1, y - 1));
 
-                }
+            //    }
+
+            bitMapCopy2.Save("after_center_copy.jpg", ImageFormat.Jpeg);
 
 
             for (int i = 0; i < newWidth * newHeight; i++) inBMP[i] = new Pixel();
@@ -185,8 +196,8 @@ namespace GaussianBlur
 
                     var watch = System.Diagnostics.Stopwatch.StartNew();
 
-                    //asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
-                    //                    out_redAddr, out_greenAddr, out_blueAddr);
+                    asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                                        out_redAddr, out_greenAddr, out_blueAddr);
                     watch.Stop();
                     elapsedMsCpp = watch.ElapsedMilliseconds;
 
@@ -208,11 +219,6 @@ namespace GaussianBlur
                         bitMapCopy.SetPixel(x, y, System.Drawing.Color.FromArgb(out_red[x + width * y], out_green[x + width * y], out_blue[x + width * y]));
                     }
 
-                //for (int y = 0; y < newHeight; y++)
-                //    for (int x = 0; x < newWidth; x++)
-                //    {
-                //        bitMapCopy2.SetPixel(x, y, System.Drawing.Color.FromArgb(in_red[x + newWidth * y], in_green[x + newWidth * y], in_blue[x + newWidth * y]));
-                //    }
 
                 PictureBox2.Source = ToBitmapImage(bitMapCopy);
                 bitMapCopy.Save("bitMapCopy.jpg", ImageFormat.Jpeg);

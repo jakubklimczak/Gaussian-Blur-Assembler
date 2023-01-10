@@ -6,7 +6,8 @@
     width4 DQ 0
 
     kernel:
-        DW 1, 2, 1, 2, 4, 2, 1, 2, 1
+        ;DW 1, 2, 1, 2, 4, 2, 1, 2, 1
+        DW 1, 1, 2, 4, 2, 2, 2, 1, 1
 .code
 
 ;RCX -> arraysize
@@ -40,7 +41,6 @@ Gauss proc
     add [width2], R13
 
     mov R14, R8
-    ;sub R14,2
 
     mov R12, qword ptr[RSP+48]
 
@@ -51,17 +51,18 @@ Gauss proc
 RLoop:
     ;vpxor ymm0, ymm0, ymm0
     ;vpxor ymm1, ymm1, ymm1
+    ;vpxor ymm2, ymm2, ymm2
     ;vpxor ymm3, ymm3, ymm3
     ;vpxor ymm4, ymm4, ymm4
 
     movd xmm1, dword ptr[R14]           ; moving two pixels into xmm1
     INSERTPS xmm2, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSRLDQ xmm2, 2                      ; shifting xmm0 to right so only one pixel is left
+    PSLLDQ xmm2, 14
+    PSRLDQ xmm2, 14                    ; shifting xmm0 to right so only one pixel is left
 
     ;vinsertf128 ymm0, ymm0, xmm0, 1     ; copying lower part of ymm0 into higher part
-    INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSLLDQ xmm0, 14
-    PSRLDQ xmm0, 10
+    ;INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
+    ;PSRLDQ xmm0, 2
 
     movd xmm1, dword ptr[R14+2]         ; moving next two pixels into xmm1
     INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
@@ -72,6 +73,8 @@ RLoop:
     PSLLDQ xmm0, 4
 
     movd xmm1, dword ptr[R14+(R13)+4]
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 12
     INSERTPS xmm0, xmm1, 00000000b
     PSLLDQ xmm0, 2
 
@@ -81,7 +84,8 @@ RLoop:
 
     ;pxor xmm1, xmm1                     ; clearing xmm1
     movd xmm1, dword ptr[R14+(R11)+4]   ; moving two pixels into xmm1
-    PSRLDQ xmm1, 2                      ; shifting xmm1 right by one pixel
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 14
     POR xmm0,xmm1                       ; logic OR on xmm0 and xmm1 so that only one pixel is inserted
 
 
@@ -89,11 +93,11 @@ RLoop:
 
     ;VPXOR ymm1, ymm1,ymm1               ; clearing ymm1
 
-    phaddw xmm4,xmm4             ; horizontal addition of results
+    vphaddw ymm4,ymm4,ymm6             ; horizontal addition of results
 
-    phaddw xmm4,xmm4             ; horizontal addition of results
+    vphaddw ymm4,ymm4,ymm6            ; horizontal addition of results
 
-    phaddw xmm4,xmm4             ; horizontal addition of results
+    vphaddw ymm4,ymm4,ymm6          ; horizontal addition of results
 
     ;VEXTRACTI128 xmm3, ymm4, 1          ; extracting ymm4 into xmm3
 
@@ -158,12 +162,12 @@ RLoop:
 
     movd xmm1, dword ptr[R14]           ; moving two pixels into xmm1
     INSERTPS xmm2, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSRLDQ xmm2, 2                      ; shifting xmm0 to right so only one pixel is left
+    PSLLDQ xmm2, 14
+    PSRLDQ xmm2, 14                    ; shifting xmm0 to right so only one pixel is left
 
     ;vinsertf128 ymm0, ymm0, xmm0, 1     ; copying lower part of ymm0 into higher part
-    INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSLLDQ xmm0, 14
-    PSRLDQ xmm0, 10
+    ;INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
+    ;PSRLDQ xmm0, 2
 
     movd xmm1, dword ptr[R14+2]         ; moving next two pixels into xmm1
     INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
@@ -174,6 +178,8 @@ RLoop:
     PSLLDQ xmm0, 4
 
     movd xmm1, dword ptr[R14+(R13)+4]
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 12
     INSERTPS xmm0, xmm1, 00000000b
     PSLLDQ xmm0, 2
 
@@ -183,9 +189,9 @@ RLoop:
 
     ;pxor xmm1, xmm1                     ; clearing xmm1
     movd xmm1, dword ptr[R14+(R11)+4]   ; moving two pixels into xmm1
-    PSRLDQ xmm1, 2                      ; shifting xmm1 right by one pixel
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 14
     POR xmm0,xmm1                       ; logic OR on xmm0 and xmm1 so that only one pixel is inserted
-
 
     vpmullw xmm4,xmm0,xmm8
 
@@ -258,14 +264,14 @@ RLoop:
     ;vpxor ymm3, ymm3, ymm3
     ;vpxor ymm4, ymm4, ymm4
 
-     movd xmm1, dword ptr[R14]           ; moving two pixels into xmm1
+    movd xmm1, dword ptr[R14]           ; moving two pixels into xmm1
     INSERTPS xmm2, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSRLDQ xmm2, 2                      ; shifting xmm0 to right so only one pixel is left
+    PSLLDQ xmm2, 14
+    PSRLDQ xmm2, 14                    ; shifting xmm0 to right so only one pixel is left
 
     ;vinsertf128 ymm0, ymm0, xmm0, 1     ; copying lower part of ymm0 into higher part
-    INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
-    PSLLDQ xmm0, 14
-    PSRLDQ xmm0, 10
+    ;INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
+    ;PSRLDQ xmm0, 2
 
     movd xmm1, dword ptr[R14+2]         ; moving next two pixels into xmm1
     INSERTPS xmm0, xmm1, 00000000b      ; inserting two pixels from xmm1 into xmm0 (without lossing other)
@@ -276,6 +282,8 @@ RLoop:
     PSLLDQ xmm0, 4
 
     movd xmm1, dword ptr[R14+(R13)+4]
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 12
     INSERTPS xmm0, xmm1, 00000000b
     PSLLDQ xmm0, 2
 
@@ -285,7 +293,8 @@ RLoop:
 
     ;pxor xmm1, xmm1                     ; clearing xmm1
     movd xmm1, dword ptr[R14+(R11)+4]   ; moving two pixels into xmm1
-    PSRLDQ xmm1, 2                      ; shifting xmm1 right by one pixel
+    PSLLDQ xmm1, 14
+    PSRLDQ xmm1, 14
     POR xmm0,xmm1                       ; logic OR on xmm0 and xmm1 so that only one pixel is inserted
 
 

@@ -7,7 +7,6 @@ void ExecuteGaussianBlurCpp(int arraysize, int width, unsigned short* in_redAddr
 							unsigned short* out_greenAddr, unsigned short* out_blueAddr)
 {
 	int kernel[9]{ 1,2,1,2,4,2,1,2,1};
-
 	int j = 0;
 	int temp;
 	int m = 0;
@@ -15,7 +14,7 @@ void ExecuteGaussianBlurCpp(int arraysize, int width, unsigned short* in_redAddr
 	for (int i = 0; i < arraysize; i++)
 	{
 		
-		if (j % width == 0)
+		if (j % (width )== 0)
 		{
 			j += 2;
 			i--;
@@ -26,7 +25,7 @@ void ExecuteGaussianBlurCpp(int arraysize, int width, unsigned short* in_redAddr
 		m = 0;
 		for (int k = 0; k < width*3; k+=width) {
 			for (int l = 0; l < 3; l++) {
-				temp+= in_redAddr[j+k+l] * kernel[m];
+				temp+= in_redAddr[j+k+l-2] * kernel[m];
 				m++;
 			}
 		}
@@ -38,7 +37,7 @@ void ExecuteGaussianBlurCpp(int arraysize, int width, unsigned short* in_redAddr
 		m = 0;
 		for (int k = 0; k < width*3; k+=width) {
 			for (int l = 0; l < 3; l++) {
-				temp+= in_greenAddr[j+k+l] * kernel[m];
+				temp+= in_greenAddr[j+k+l - 2] * kernel[m];
 				m++;
 			}
 		}
@@ -50,7 +49,7 @@ void ExecuteGaussianBlurCpp(int arraysize, int width, unsigned short* in_redAddr
 		m = 0;
 		for (int k = 0; k < width*3; k+=width) {
 			for (int l = 0; l < 3; l++) {
-				temp+= in_blueAddr[j+k+l] * kernel[m];
+				temp+= in_blueAddr[j+k+l - 2] * kernel[m];
 				m++;
 			}
 		}
