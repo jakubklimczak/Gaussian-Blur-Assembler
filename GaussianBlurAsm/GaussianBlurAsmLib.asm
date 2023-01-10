@@ -4,6 +4,7 @@
     iterator_input DQ 0
     width2 DQ 0
     width4 DQ 0
+    border_detector DQ 0
 
     kernel:
         ;DW 1, 2, 1, 2, 4, 2, 1, 2, 1
@@ -22,9 +23,8 @@
 
 Gauss proc
 
-
-
     mov [iterator], 0
+
     mov [iterator_input], 0
     mov [arraysize], 0
     mov [width2], 0
@@ -39,6 +39,8 @@ Gauss proc
 
     mov [width2], R13
     add [width2], R13
+
+    mov [border_detector], R13
 
     mov R14, R8
 
@@ -113,16 +115,18 @@ RLoop:
     add iterator_input, 2
     add R14, 2
 
-    mov RAX,iterator_input
-    add RAX, 4
-    mov RDX, 0
-    div R13
+    ;mov RAX,iterator_input
+    ;add RAX, 4
+    ;mov RDX, 0
+    ;div R13
 
-    CMP RDX, 0
+    mov RAX,border_detector
+    CMP RAX, [iterator_input]
 
     jnz NoPixelSkipR
     add R14, 4
     add iterator_input, 4
+    add [border_detector],R13
 
     NoPixelSkipR:
 
@@ -135,6 +139,7 @@ RLoop:
     mov [arraysize], 0
     mov [width2], 0
     mov [width4], 0
+    mov [border_detector], R13
 
     mov [arraysize], RCX                    ; moving size of the array into arraysize
 
@@ -217,16 +222,20 @@ RLoop:
     add iterator_input, 2
     add R14, 2
 
-    mov RAX,iterator_input
-    add RAX, 4
-    mov RDX, 0
-    div R13
+    ;mov RAX,iterator_input
+    ;add RAX, 4
+    ;mov RDX, 0
+    ;div R13
 
-    CMP RDX, 0
+    ;CMP RDX, 0
+
+    mov RAX,border_detector
+    CMP RAX, [iterator_input]
 
     jnz NoPixelSkipG
     add R14, 4
     add iterator_input, 4
+    add [border_detector], R13
 
     NoPixelSkipG:
 
@@ -239,6 +248,7 @@ RLoop:
     mov [arraysize], 0
     mov [width2], 0
     mov [width4], 0
+    mov [border_detector], R13
 
     mov [arraysize], RCX                    ; moving size of the array into arraysize
 
@@ -322,16 +332,20 @@ RLoop:
     add iterator_input, 2
     add R14, 2
 
-    mov RAX,iterator_input
-    add RAX, 4
-    mov RDX, 0
-    div R13
+    ;mov RAX,iterator_input
+    ;add RAX, 4
+    ;mov RDX, 0
+    ;div R13
+    ;CMP RDX, 0
 
-    CMP RDX, 0
+    mov RAX,border_detector
+    CMP RAX, [iterator_input]
+
 
     jnz NoPixelSkipB
     add R14, 4
     add iterator_input, 4
+    add [border_detector], R13
 
     NoPixelSkipB:
 
