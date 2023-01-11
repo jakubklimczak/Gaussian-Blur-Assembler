@@ -1,20 +1,2 @@
-1) Assembler: 130 Cpp: 63
-
-2) Assembler: 130 Cpp: 67
-
-3) Assembler: 129 Cpp: 62
-
-4) Assembler: 129 Cpp: 63
-
-5) Assembler: 128 Cpp: 61
-
-6) Assembler: 128 Cpp: 62
-
-7) Assembler: 128 Cpp: 63
-
-8) Assembler: 127 Cpp: 62
-
-9) Assembler: 128 Cpp: 64
-
-10) Assembler: 127 Cpp: 63
+1) Assembler: 5 Cpp: 2
 
