@@ -9,9 +9,11 @@ using System.Windows.Forms;
 using System.Timers;
 using System.Threading;
 using System.Drawing.Drawing2D;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GaussianBlur
 {
+    
 
 
     public struct Pixel
@@ -53,6 +55,7 @@ namespace GaussianBlur
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int repetitions = 1;
         public static System.Timers.Timer timer;
         public MainWindow()
         {
@@ -74,7 +77,16 @@ namespace GaussianBlur
         private void Button_execute(object sender, RoutedEventArgs e)
         {
             BitmapImage mybitmapImage = (BitmapImage)(PictureBox1.Source);
-            System.Drawing.Bitmap bitMapCopy = BitmapImage2Bitmap(mybitmapImage);
+            System.Drawing.Bitmap bitMapCopy;
+            try
+            {
+                bitMapCopy = BitmapImage2Bitmap(mybitmapImage);
+            }catch(System.ArgumentNullException ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                return;
+            }
+            
 
             int width = bitMapCopy.Width;
             int height = bitMapCopy.Height;
@@ -85,7 +97,7 @@ namespace GaussianBlur
             int newWidth = width + 2;
             int newHeight = height + 2;
 
-            Image newImage = new Bitmap(newWidth, newHeight);
+            System.Drawing.Image newImage = new Bitmap(newWidth, newHeight);
             using (Graphics gfx = Graphics.FromImage(newImage))
             {
                 using (Brush border = new SolidBrush(Color.White))
@@ -187,30 +199,45 @@ namespace GaussianBlur
                 }
 
 
-
+                File.Delete("detailed_results.txt");
                 AsmProxy asmP = new AsmProxy();
                 fixed (ushort* in_redAddr = in_red, in_greenAddr = in_green, in_blueAddr = in_blue,
                     out_redAddr = out_red, out_greenAddr = out_green, out_blueAddr = out_blue)
                 {
-                    long elapsedMsAsm = 0, elapsedMsCpp = 0;
+                    long elapsedMsAsm = 0, elapsedMsCpp = 0, elapsedMsAsmAvg = 0, elapsedMsCppAvg = 0;
+                    string iteration_result = "";
 
-                    var watch = System.Diagnostics.Stopwatch.StartNew();
+                    for(int i = 0; i < this.repetitions+1; i++)
+                    {
+                        var watch = System.Diagnostics.Stopwatch.StartNew();
 
-                    asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
-                                        out_redAddr, out_greenAddr, out_blueAddr);
-                    watch.Stop();
-                    elapsedMsCpp = watch.ElapsedMilliseconds;
+                        asmP.executeGaussCpp(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                                            out_redAddr, out_greenAddr, out_blueAddr);
+                        watch.Stop();
+                        elapsedMsCpp = watch.ElapsedMilliseconds;
 
-                    watch = System.Diagnostics.Stopwatch.StartNew();
+                        watch = System.Diagnostics.Stopwatch.StartNew();
 
-                    asmP.executeGauss(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
-                    out_redAddr, out_greenAddr, out_blueAddr);
+                        asmP.executeGauss(width * height, newWidth, in_redAddr, in_greenAddr, in_blueAddr,
+                        out_redAddr, out_greenAddr, out_blueAddr);
 
-                    watch.Stop();
-                    elapsedMsAsm = watch.ElapsedMilliseconds;
+                        watch.Stop();
+                        elapsedMsAsm = watch.ElapsedMilliseconds;
+                        if (i > 0)
+                        {
+                            elapsedMsAsmAvg += elapsedMsAsm;
+                            elapsedMsCppAvg += elapsedMsCpp;
 
+                            iteration_result = i.ToString() + ") Assembler: " + elapsedMsAsm.ToString() + " Cpp: " + elapsedMsCpp.ToString() + "\n";
 
-                    textoutput.Text = "Assembler: "+elapsedMsAsm.ToString()+"\nCpp: "+elapsedMsCpp.ToString();
+                            using StreamWriter file = new("detailed_results.txt", append: true);
+                            file.WriteLineAsync(iteration_result);
+                        }
+
+                    }
+                    elapsedMsAsmAvg /= repetitions;
+                    elapsedMsCppAvg /= repetitions;
+                    textoutput.Text = "Average execution times (without first iteration): \n"+"Assembler: "+ elapsedMsAsmAvg.ToString()+" \nCpp: "+ elapsedMsCppAvg.ToString();
                 }
 
                 for (int y = 0; y < height; y++)
@@ -282,5 +309,12 @@ namespace GaussianBlur
             }
         }
 
-    }
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            repetitions = (int)slider.Value;
+            if(repetitions_textbox!=null)
+                repetitions_textbox.Text = "Number of repetitions: "+repetitions.ToString();
+        }
+
+   }
 }

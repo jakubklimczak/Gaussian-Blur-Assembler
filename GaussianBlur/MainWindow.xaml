@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:local="clr-namespace:GaussianBlur"
         mc:Ignorable="d"
         Title="MainWindow" Height="950" Width="1800">
@@ -11,9 +12,11 @@
         <Image x:Name="PictureBox2" HorizontalAlignment="Left" Height="500" Margin="900,10,0,0" VerticalAlignment="Top" Width="878
                "/>
         <Button x:Name="button1" Content="Browse" HorizontalAlignment="Left" Margin="410,835,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_Click"/>
-        <Button x:Name="button2" Content="Grayscale" HorizontalAlignment="Left" Margin="1545,830,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_execute"/>
-        <TextBox Name="textoutput" Margin="672,641,672,118">
-            Initial text contents of the TextBox.
+        <Button x:Name="button2" Content="Blur" HorizontalAlignment="Left" Margin="1545,830,0,0" VerticalAlignment="Top" Height="44" Width="100" Click="Button_execute"/>
+        <TextBox Name="textoutput" Margin="748,720,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            
         </TextBox>
+        <Slider Name="slider" HorizontalAlignment="Left" Margin="489,559,0,0" VerticalAlignment="Top" Width="828" ValueChanged="Slider_ValueChanged" Minimum="1" Value="1"/>
+        <TextBox Name="repetitions_textbox" Margin="736,515,852,380" Text="Number of repetitions: 1" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Window>
